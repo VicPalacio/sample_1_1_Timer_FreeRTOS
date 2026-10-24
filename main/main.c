@@ -55,7 +55,10 @@ esp_err_t init_led(void) {
     return ESP_OK;
 }
 /* blink_led
-/// @brief Hace un toggle al pin pasado parámetro
+/// @brief Hace un toggle al pin pasado parámetro y muestra la cuenta que lleva
+/// la variable cuenta_blink_led_rojo en entero decimal no signado (%u), en
+/// caracter (%c) y en binario (for que convierte a binario y lo muestra en
+/// en decimal en al consola)
 /// @param Recibe un número de pin
 /// @return ok
 */
@@ -63,9 +66,17 @@ esp_err_t blink_led(void) {
     led_level = !led_level;
     gpio_set_level(led_rojo, led_level);
     cuenta_blink_led_rojo++;
-    ESP_LOGI(tag, "Cuenta Blink LED Rojo: %u", cuenta_blink_led_rojo);
+    ESP_LOGI(tag, "Cuenta Blink como no signado decimal entero: %u", cuenta_blink_led_rojo);
+    ESP_LOGW(tag, "Cuenta Blink como caracter: %c", cuenta_blink_led_rojo);
+
+    printf("Cuenta Blink como binario: ");
+    for (int i = 7; i >= 0; i--) {
+        printf("%d", (cuenta_blink_led_rojo >> i) & 1);
+    }
+    printf("\n");
     return ESP_OK;
 }
+
 /* set_timer
 /// @brief Configura el timer así:
 * Función xTimerCreate crea y configura el timer

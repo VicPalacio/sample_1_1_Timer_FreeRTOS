@@ -47,6 +47,8 @@
  #### pdMS_TO_TICKS(xTimeInMs)
  Conversión de milisegundos a ticks, la variable xTimeInMs puede ser por ejemplo una variable tipo entero (int) también existe otra función que hace la operación inversa, la función es: pdTICKS_TO_MS( xTicks ) en el archivo projdefs.h 
     
+### Descripción de lo que hace el codigo
+Lleva una cuenta en la variable cuenta_blink_led_rojo, la cual va de 0 - 255 (tamano de un byte) y realiza el toggle a un led. La cuenta de la variable es mostrada en el monitor en diferetes formados: entero decimal no signado, caracter y binario por medio de conversion. el periodo es puesto directamente en la variable periodo_intervalo_de_tiempo_ms es del tipo entero y está en ms como se indica ahí mismo.
 
 + Cuando se crea un timer se crea en estado inactivo y es necesaria otra función para activarlas, dichas funciones son:
 
