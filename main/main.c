@@ -7,20 +7,19 @@
  * Created on 22 de Agosto de 2026
  */
 
-#include <stdio.h>
-#include "driver/gpio.h" // Encontrado en: C:\ESP32_ESPRESSIF\v5.2.1\esp-idf\components\driver\gpio\include\driver
-#include "freertos/FreeRTOS.h" //Encontrado en: C:\ESP32_ESPRESSIF\v5.2.1\esp-idf\components\freertos\FreeRTOS-Kernel\include\freertos
-#include "freertos/task.h" // Encontrado en:   // C:\ESP32_ESPRESSIF\v5.2.1\esp-idf\components\freertos\FreeRTOS-Kernel\include\freertos
-#include "esp_log.h" // Encontrado en: C:\ESP32_ESPRESSIF\v5.2.1\esp-idf\components\log\include\esp_log.h
-#include "freertos/timers.h" //Encontrado en: // C:\ESP32_ESPRESSIF\v5.2.1\esp-idf\components\freertos\FreeRTOS-Kernel\include\freertos
+#include <stdio.h> // /home/victor/.espressif/v6.1/esp-idf/components/esp_libc/platform_include
+#include "driver/gpio.h" // En: /home/victor/.espressif/v6.1/esp-idf/components/esp_driver_gpio/include/driver
+#include "freertos/FreeRTOS.h" //En: /home/victor/.espressif/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/include/freertos
+#include "freertos/task.h" //En: /home/victor/.espressif/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/include/freertos
+#include "freertos/timers.h" //En: /home/victor/.espressif/v6.1/esp-idf/components/freertos/FreeRTOS-Kernel/include/freertos
+#include "esp_log.h" // En: /home/victor/.espressif/v6.1/esp-idf/components/log/include
 #define led_rojo 5
 
 uint8_t led_level = 0, cuenta_blink_led_rojo = 0;
-uint8_t cuenta_app_main = 0;
-static const char *tag = "Main"; // Main es el módulo donde se está usando la librería
-TimerHandle_t xTimers;           // Este tipo de variable existe dentro del timers.h
-int interval = 1000;             // Intervalo de tiempo para el timer, o el evento
-int timerId = 1;                 // Identificador del timer
+static const char *tag = "Main";           // Main es el módulo donde se está usando la librería
+TimerHandle_t xTimers;                     // Este tipo de variable existe dentro del timers.h
+int periodo_intervalo_de_tiempo_ms = 1000; // Periodo_de_tiempo para el timer, o evento
+int timerId = 1;                           // Identificador del timer
 
 /*Funciones creadas*/
 esp_err_t init_led(void);
@@ -71,7 +70,7 @@ esp_err_t blink_led(void) {
 /// @brief Configura el timer así:
 * Función xTimerCreate crea y configura el timer
 * "Timer": es el nombre, no es usado por el Kernel
-* (pdMS_TO_TICKS(interval)): función que pasa de ms a ticks para definir
+* (pdMS_TO_TICKS(periodo_intervalo_de_tiempo_ms)): función que pasa de ms a ticks para definir
 el PERIODO de duración del timer.
 * vTimerCallback: función definida en la librería "timers.h"
 * pdTRUE: Este parámetro afirma que se debe recargar el timer
@@ -81,15 +80,14 @@ el PERIODO de duración del timer.
 esp_err_t set_timer(void) {
     ESP_LOGW(tag, "Timer init configuration");
     xTimers =
-        xTimerCreate("Timer",                   // Solo es un nombre, no es usado por el kernel.
-                     (pdMS_TO_TICKS(interval)), // Conversión de ms a Ticks.
+        xTimerCreate("Timer", // Solo es un nombre, no es usado por el kernel.
+                     (pdMS_TO_TICKS(periodo_intervalo_de_tiempo_ms)), // Conversión de ms a Ticks.
                      // pdFALSE,
                      // El parámetro pdFALSE hace que solo se ejecute una vez y se validó operación
                      pdTRUE,
                      // El timer se autorrecargará cuando expire. linea nueva 10082024
                      (void *)timerId, // Asigna un único ID para igual para indice del array
                      vTimerCallback); // Cada timer llama la misma función callback cuando termina
-    // Aquí sería muy interesante saber que valor recibe xTimers
     if (xTimers == NULL) {
         ESP_LOGE(tag, "The timer was not created.");
     } else {
