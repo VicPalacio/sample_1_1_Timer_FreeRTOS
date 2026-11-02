@@ -2,7 +2,7 @@
 
 + Este proyecto fue construido con: 
     + S.O: Ubuntu 26.04.1 LTS 
-    + Visual Studio Code: 1.141.0
+    + Visual Studio Code: 1.143.0
     + ESP-IDF: V6.1.0
 
 + En este ejemplo se crea un timer que pretende demostrar el uso he implementacion del timer
